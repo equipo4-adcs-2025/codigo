@@ -1,0 +1,49 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Java
+*.class
+
+# Environment
+.env
+*.env
+
+# Test reports
+test-output/
+build/reports/
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+*.orig
+# Dependency caches
+**/out/
+**/.classpath
+**/.project
+**/.settings/
+
+# Spring Boot specific
+*.jar
+*.war
+*.ear
+
+# Others
+node_modules/
