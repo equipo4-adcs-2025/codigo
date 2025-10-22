@@ -13,10 +13,33 @@ repositories {
 }
 
 dependencies {
+    // SpringBoot
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testCompileOnly 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    // MySQL
+    // runtimeOnly 'mysql:mysql-connector-java:8.0.33'
+    implementation 'mysql:mysql-connector-java:8.0.27'
+
+    // Flyway
+    implementation 'org.flywaydb:flyway-core:9.22.3'
+    implementation 'org.flywaydb:flyway-mysql'
 }
 
 test {
     useJUnitPlatform()
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'org.flywaydb:flyway-core:9.22.3'
+    }
 }
