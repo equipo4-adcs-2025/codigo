@@ -12,7 +12,7 @@ The base package for this project is: `mx.tec.mna.adcs.team4.backend`
 
 - Java 17+
 - Gradle (or use the included `gradlew` wrapper)
-- Git (optional)
+- Git
 
 ### Steps
 
