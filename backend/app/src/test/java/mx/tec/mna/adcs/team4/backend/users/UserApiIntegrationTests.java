@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -62,6 +63,57 @@ public class UserApiIntegrationTests {
 
         assertThat(userRepository.findAll())
                 .anyMatch(user -> user.getEmail().equals("test@example.com"));
+    }
+
+    @Test
+    @Disabled("not working yet")
+    void shouldFailWhenEmailIsDuplicated() throws Exception {
+        NewUserRequest user1 = new NewUserRequest();
+        user1.setEmail("duplicate@example.com");
+        user1.setPassword("password123");
+        user1.setFirstName("Alice");
+        user1.setLanId("LAN001");
+
+        mockMvc.perform(post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user1)))
+                .andExpect(status().isCreated());
+
+        NewUserRequest user2 = new NewUserRequest();
+        user2.setEmail("duplicate@example.com"); // same email
+        user2.setPassword("password456");
+        user2.setFirstName("Bob");
+        user2.setLanId("LAN002");
+
+        mockMvc.perform(post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user2)))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void shouldFailWhenLanIdIsDuplicated() throws Exception {
+        NewUserRequest user1 = new NewUserRequest();
+        user1.setEmail("user1@example.com");
+        user1.setPassword("password123");
+        user1.setFirstName("Alice");
+        user1.setLanId("LAN123");
+
+        mockMvc.perform(post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user1)))
+                .andExpect(status().isCreated());
+
+        NewUserRequest user2 = new NewUserRequest();
+        user2.setEmail("user2@example.com");
+        user2.setPassword("password456");
+        user2.setFirstName("Bob");
+        user2.setLanId("LAN123"); // same LAN ID
+
+        mockMvc.perform(post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user2)))
+                .andExpect(status().isConflict());
     }
 
     @Test
