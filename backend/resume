@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# resume - helper script for backend operations
+
+function show_help() {
+  echo "Usage: ./resume <command>"
+  echo ""
+  echo "Available commands:"
+  echo "  docker-run     Run docker-compose up"
+  echo "  docker-stop    Stop docker-compose services"
+  echo "  docker-build   Build backend Docker image"
+  echo "  run            Run SpringBoot app directly"
+  echo "  test           Run Gradle tests"
+  echo "  bootjar        Build Spring Boot JAR"
+  echo "  help           Show this help message"
+}
+
+case "$1" in
+  docker-run)
+    ./gradlew :app:bootJar && docker-compose up --build -d
+    ;;
+  docker-stop)
+    docker-compose down
+    ;;
+  docker-build)
+    docker build -t resume-backend ./backend/app
+    ;;
+  test)
+    ./gradlew :app:test jacocoTestReport
+    ;;
+  bootjar)
+    ./gradlew :app:bootJar
+    ;;
+  run)
+    ./gradlew :app:bootRun
+    ;;
+  help|*)
+    show_help
+    ;;
+esac
