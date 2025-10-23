@@ -41,7 +41,7 @@ The base package for this project is: `mx.tec.mna.adcs.team4.backend`
 3. Run the application:
 
 ```bash
-./gradlew :app:bootRun
+./resume run
 ```
 
 4. The application will start on: `http://localhost:8080`
