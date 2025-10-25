@@ -13,8 +13,9 @@ practices = ["Desarrollo", "Calidad", "Diseño", "Gestión", "Soporte"]
 
 
 def print_response(response, label = "Respuesta: "):
-    print(label)
+    print(f"\n{label}\n")
     print(json.dumps(response.json(), indent=4, ensure_ascii=False))
+    print(f"*******************************************************\n")
 
 def get_user_list():
     response = requests.get(BASE_URL)
@@ -92,35 +93,41 @@ def delete_user():
     else:
         print("Error al eliminar usuario.")
 
+menu_options = [
+    {"label": "Listar usuarios", "action": get_user_list},
+    {"label": "Ver usuario por ID", "action": show_user_by_id},
+    {"label": "Crear usuario (valores aleatorios)", "action": create_new_user},
+    {"label": "Editar usuario (valores aleatorios)", "action": editar_usuario},
+    {"label": "Editar lanId (PATCH)", "action": patch_lan_id},
+    {"label": "Eliminar usuario", "action": delete_user},
+    {"label": "Salir", "action": None}
+]
+
 def menu():
     while True:
-        print("\nSeleccione una opción:")
-        print("1. Listar usuarios")
-        print("2. Ver usuario por ID")
-        print("3. Editar usuario (valores aleatorios)")
-        print("4. Editar lanId (PATCH)")
-        print("5. Borrar usuario")
-        print("6. Crear usuario (valores aleatorios)")
-        print("7. Salir")
+        print("========================")
+        print("Seleccione una opción:")
+        for i, option in enumerate(menu_options, start=1):
+            print(f"{i}. {option['label']}")
+        print("========================")
+        print("")
+        choice = input("Opción: ")
+        
 
-        option = input("Opción: ")
-
-        if option == "1":
-            get_user_list()
-        elif option == "2":
-            show_user_by_id()
-        elif option == "3":
-            editar_usuario()
-        elif option == "4":
-            patch_lan_id()
-        elif option == "5":
-            delete_user()
-        elif option == "6":
-            create_new_user()
-        elif option == "7":
-            break
+        if choice.isdigit():
+            index = int(choice) - 1
+            if 0 <= index < len(menu_options):
+                selected = menu_options[index]
+                if selected["action"]:
+                    selected["action"]()
+                else:
+                    print("¡Gracias por usar el sistema! Hasta pronto.")
+                    break
+            else:
+                print("Opción fuera de rango.")
         else:
-            print("Opción inválida.")
+            print("Entrada inválida. Por favor ingrese un número.")
+
 
 if __name__ == "__main__":
     menu()
