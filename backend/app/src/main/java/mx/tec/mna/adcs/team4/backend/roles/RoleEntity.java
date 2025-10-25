@@ -3,6 +3,8 @@ package mx.tec.mna.adcs.team4.backend.roles;
 import java.util.UUID;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,5 +38,6 @@ public class RoleEntity {
     private String description;
 
     @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     private RoleType type;
 }

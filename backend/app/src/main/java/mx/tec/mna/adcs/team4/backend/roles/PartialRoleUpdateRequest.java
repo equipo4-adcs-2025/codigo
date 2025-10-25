@@ -10,7 +10,6 @@ public class PartialRoleUpdateRequest implements RoleUpdateRequest {
     private String roleName;
     private String displayName;
     private String description;
-    private RoleType type;
 
     @Override
     public RoleEntity mapToEntity(RoleEntity source) {
@@ -26,9 +25,8 @@ public class PartialRoleUpdateRequest implements RoleUpdateRequest {
             source.setDescription(getDescription());
         }
 
-        if (getType() != null) {
-            source.setType(getType());
-        }
+        // Always set type to CUSTOM for API-created roles
+        source.setType(RoleType.CUSTOM);
 
         return source;
     }

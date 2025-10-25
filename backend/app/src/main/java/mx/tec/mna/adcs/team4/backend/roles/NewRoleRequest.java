@@ -12,7 +12,6 @@ public class NewRoleRequest {
     private String roleName;
     private String displayName;
     private String description;
-    private RoleType type;
 
     public RoleEntity toEntity() {
         var roleId = UUID.randomUUID();
@@ -22,7 +21,7 @@ public class NewRoleRequest {
                 .role_name(getRoleName())
                 .display_name(getDisplayName())
                 .description(getDescription())
-                .type(getType())
+                .type(RoleType.CUSTOM)
                 .build();
     }
 

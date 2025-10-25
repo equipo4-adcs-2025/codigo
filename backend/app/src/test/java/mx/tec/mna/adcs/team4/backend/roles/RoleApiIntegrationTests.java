@@ -51,7 +51,6 @@ public class RoleApiIntegrationTests {
         request.setRoleName("CREATE_USER");
         request.setDisplayName("Create User");
         request.setDescription("Allows creating new users");
-        request.setType(RoleType.CUSTOM);
 
         createRole(request)
                 .andExpect(status().isCreated());
@@ -67,7 +66,6 @@ public class RoleApiIntegrationTests {
         request.setRoleName("READ_USER");
         request.setDisplayName("Read User");
         request.setDescription("Allows reading user information");
-        request.setType(RoleType.SYSTEM);
 
         String responseBody = createRole(request)
                 .andExpect(status().isCreated())
@@ -94,7 +92,6 @@ public class RoleApiIntegrationTests {
         role1.setRoleName("CREATE_USER");
         role1.setDisplayName("Create User");
         role1.setDescription("Allows creating new users");
-        role1.setType(RoleType.CUSTOM);
 
         createRole(role1)
                 .andExpect(status().isCreated());
@@ -104,7 +101,6 @@ public class RoleApiIntegrationTests {
         role2.setRoleName("UPDATE_USER");
         role2.setDisplayName("Update User");
         role2.setDescription("Allows updating user information");
-        role2.setType(RoleType.SYSTEM);
 
         createRole(role2)
                 .andExpect(status().isCreated());
@@ -126,7 +122,6 @@ public class RoleApiIntegrationTests {
         request.setRoleName("DELETE_USER");
         request.setDisplayName("Delete User");
         request.setDescription("Allows deleting users");
-        request.setType(RoleType.CUSTOM);
 
         String response = createRole(request)
                 .andExpect(status().isCreated())
@@ -140,7 +135,6 @@ public class RoleApiIntegrationTests {
         update.setRoleName("DELETE_USER_UPDATED");
         update.setDisplayName("Delete User Updated");
         update.setDescription("Updated description for deleting users");
-        update.setType(RoleType.SYSTEM);
 
         mockMvc.perform(put("/api/roles/" + roleId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -158,7 +152,6 @@ public class RoleApiIntegrationTests {
         request.setRoleName("ORIGINAL_ROLE");
         request.setDisplayName("Original Display Name");
         request.setDescription("Original description");
-        request.setType(RoleType.CUSTOM);
 
         String response = createRole(request)
                 .andExpect(status().isCreated())
@@ -170,7 +163,6 @@ public class RoleApiIntegrationTests {
         // Partial update
         PartialRoleUpdateRequest update1 = new PartialRoleUpdateRequest();
         update1.setDisplayName("Updated Display Name");
-        update1.setType(RoleType.SYSTEM);
 
         patchRole(roleId, update1)
                 .andExpect(status().isOk())
@@ -200,7 +192,6 @@ public class RoleApiIntegrationTests {
         request.setRoleName("TO_DELETE");
         request.setDisplayName("To Delete");
         request.setDescription("This role will be deleted");
-        request.setType(RoleType.CUSTOM);
 
         String response = createRole(request)
                 .andExpect(status().isCreated())
