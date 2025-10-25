@@ -68,10 +68,10 @@ def show_user_by_id():
 def editar_usuario():
     user_id = input("Ingrese el ID del usuario a editar: ")
     payload = {
-        "firstName": f"{random_first_name()}Put",
-        "lastName": f"{random_last_name()}Put",
-        "email": f"{random_lan_id()}@ejemplo_put.com",
-        "title": f"{random_title()}Put",
+        "firstName": f"{random_first_name()}_PUT_UPDATE_FROM_SCRIPT",
+        "lastName": f"{random_last_name()}",
+        "email": f"{random_lan_id()}@ejemplo_put_method.com",
+        "title": f"{random_title()}",
         "country": random_country(),
         "practice": random_practice(),
         "lanId": random_lan_id()
@@ -92,6 +92,7 @@ def delete_user():
         print("Usuario eliminado correctamente.")
     else:
         print("Error al eliminar usuario.")
+    print_response(response)
 
 menu_options = [
     {"label": "Listar usuarios", "action": get_user_list},
