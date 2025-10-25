@@ -1,4 +1,4 @@
-package mx.tec.mna.adcs.team4.backend.role;
+package mx.tec.mna.adcs.team4.backend.roles;
 
 /**
  * Enum representing the type of role in the system.
