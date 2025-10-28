@@ -16,6 +16,7 @@ security:
   - bearerAuth: []
 
 paths:
+  # User Management
   /users:
     post:
       summary: Create a new user
@@ -56,7 +57,7 @@ paths:
         '404':
           description: User not found
 
-
+  # Role Management
   /user-management/roles:
     get:
       summary: Get all roles
@@ -165,7 +166,7 @@ paths:
           description: Forbidden - User does not have permission to access this resource
         '404':
           description: Role not found
-
+  # Skills
   /skills/categories:
     get:
       summary: Get all skill categories
@@ -228,7 +229,20 @@ paths:
           description: Forbidden - User does not have permission to access this resource
         '404':
           description: Category not found
-
+  # Permissions
+  /permissions:
+    get:
+      summary: Get all permissions
+      description: Get all permissions
+      operationId: getAllPermissions
+      tags: [Permissions]
+      responses:
+        '200':
+          description: List of permissions
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
 components:
   securitySchemes:
     bearerAuth:
@@ -293,3 +307,5 @@ tags:
     description: Endpoints for role management
   - name: SkillCatalog
     description: Endpoints for skill category management
+  - name: Permissions
+    description: Endpoints for permission management
