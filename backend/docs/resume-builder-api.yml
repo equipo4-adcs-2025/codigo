@@ -1,0 +1,311 @@
+openapi: 3.0.0
+info:
+  title: Resume Builder API
+  description: API for managing users, roles, permissions, and skill catalog.
+  version: 1.0.0
+  contact:
+    name: Resume Builder Team
+    email: a01796323@tec.mx
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: http://localhost:8080
+    description: Local Server
+security:
+  - bearerAuth: []
+
+paths:
+  # User Management
+  /users:
+    post:
+      summary: Create a new user
+      description: Creates a new user
+      operationId: createUser
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUserRequestBody'
+      responses:
+        '201':
+          description: User created
+        '400':
+          description: Bad request
+
+  /users/{userId}:
+    get:
+      summary: Get user by ID
+      description: Placeholder for retrieving user details
+      operationId: getUserById
+      tags: [Users]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User found
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+        '404':
+          description: User not found
+
+  # Role Management
+  /user-management/roles:
+    get:
+      summary: Get all roles
+      description: Placeholder for retrieving all roles
+      operationId: getAllRoles
+      tags: [Roles]
+      responses:
+        '200':
+          description: List of roles
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+
+    post:
+      summary: Create a new role
+      description: Placeholder for role creation
+      operationId: createRole
+      tags: [Roles]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Role'
+      responses:
+        '201':
+          description: Role created
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+  /user-management/roles/{roleId}:
+    get:
+      summary: Get role by ID
+      description: Placeholder for retrieving role details
+      operationId: getRoleById
+      tags:
+        - Roles
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          description: ID of the role
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Role found
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+        '404':
+          description: Role not found
+    put:
+      summary: Update role by ID
+      description: Placeholder for updating role
+      operationId: fullUpdateRoleById
+      tags: [Roles]
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          description: ID of the role
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Role'
+      responses:
+        '200':
+          description: Role updated
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+
+    delete:
+      summary: Delete role by ID
+      description: Placeholder for deleting role
+      operationId: deleteRoleById
+      tags: [Roles]
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          description: ID of the role
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Role deleted
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+        '404':
+          description: Role not found
+  # Skills
+  /skills/categories:
+    get:
+      summary: Get all skill categories
+      description: Placeholder for retrieving skill categories
+      operationId: getAllSkillCategories
+      tags: [SkillCatalog]
+      responses:
+        '200':
+          description: List of skill categories
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+
+    post:
+      summary: Create a new skill category
+      description: Placeholder for skill category creation
+      operationId: createSkillCategory
+      tags: [SkillCatalog]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillCategory'
+      responses:
+        '201':
+          description: Skill category created
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+
+  /skills/categories/{categoryId}:
+    put:
+      summary: Update skill category
+      description: Placeholder for updating skill category
+      operationId: fullUpdateSkillCategory
+      tags: [SkillCatalog]
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillCategory'
+      responses:
+        '200':
+          description: Skill category 
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+        '404':
+          description: Category not found
+  # Permissions
+  /permissions:
+    get:
+      summary: Get all permissions
+      description: Get all permissions
+      operationId: getAllPermissions
+      tags: [Permissions]
+      responses:
+        '200':
+          description: List of permissions
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    NewUserRequestBody:
+      type: object
+      description: Represents the information needed to create a new user
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        title:
+          type: string
+        country:
+          type: string
+        practice:
+          type: string
+        lanId:
+          type: string
+      required: [firstName, lastName, email, password]
+
+    Role:
+      type: object
+      description: Placeholder for role schema
+      properties:
+        roleName:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+      required: [roleName, displayName]
+
+    SkillCategory:
+      type: object
+      description: Placeholder for skill category schema
+      properties:
+        skillCategoryName:
+          type: string
+      required: [skillCategoryName]
+
+tags:
+  - name: Users
+    description: Endpoints for user management
+  - name: Roles
+    description: Endpoints for role management
+  - name: SkillCatalog
+    description: Endpoints for skill category management
+  - name: Permissions
+    description: Endpoints for permission management
