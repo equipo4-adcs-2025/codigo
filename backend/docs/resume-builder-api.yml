@@ -243,6 +243,35 @@ paths:
           description: Unauthorized - Authentication is required or token is invalid/expired
         '403':
           description: Forbidden - User does not have permission to access this resource
+    post:
+      summary: Create new permission
+      description: Create a new permission
+      operationId: createPermission
+      tags: [Permissions]
+      responses:
+        '200':
+          description: Permission created
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+
+  /permissions/{permissionId}:
+    delete:
+      summary: Delete a permission
+      description: Delete a specific permission
+      operationId: deletePermissionByPermissionId
+      tags: [Permissions]
+      responses:
+        '200':
+          description: Permission deleted
+        '400':
+          description: Bad request
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+          
 components:
   securitySchemes:
     bearerAuth:
@@ -300,6 +329,23 @@ components:
           type: string
       required: [skillCategoryName]
 
+    Permission:
+      type: object
+      description: Placeholder for permission schema
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        creation_date:
+          type: dateTime
+        enabled:
+          type: boolean
+      required: [name, display_name, description]
 tags:
   - name: Users
     description: Endpoints for user management
