@@ -57,6 +57,34 @@ paths:
         '404':
           description: User not found
 
+  /users/{userId}/profile:
+    get:
+      summary: Get profile by user ID
+      description: Retrieves the profile associated with a specific user
+      operationId: getProfileByUserId
+      tags: [Profiles]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user
+          schema:
+            type: string
+            format: binary
+      responses:
+        '200':
+          description: Profile found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+        '404':
+          description: Profile not found
+
   # Profile Management
   /profiles:
     post:
@@ -198,34 +226,6 @@ paths:
       responses:
         '204':
           description: Profile deleted successfully
-        '401':
-          description: Unauthorized - Authentication is required or token is invalid/expired
-        '403':
-          description: Forbidden - User does not have permission to access this resource
-        '404':
-          description: Profile not found
-
-  /profiles/user/{userId}:
-    get:
-      summary: Get profile by user ID
-      description: Retrieves a profile associated with a specific user
-      operationId: getProfileByUserId
-      tags: [Profiles]
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          description: ID of the user
-          schema:
-            type: string
-            format: binary
-      responses:
-        '200':
-          description: Profile found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
         '401':
           description: Unauthorized - Authentication is required or token is invalid/expired
         '403':
