@@ -232,7 +232,7 @@ paths:
   # Permissions
   /permissions:
     get:
-      summary: Get all permissions
+      summary: Get permissions
       description: Get all permissions
       operationId: getAllPermissions
       tags: [Permissions]
@@ -248,6 +248,12 @@ paths:
       description: Create a new permission
       operationId: createPermission
       tags: [Permissions]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Permission'
       responses:
         '200':
           description: Permission created
