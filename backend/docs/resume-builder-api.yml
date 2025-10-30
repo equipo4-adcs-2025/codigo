@@ -57,6 +57,182 @@ paths:
         '404':
           description: User not found
 
+  # Profile Management
+  /profiles:
+    post:
+      summary: Create a new profile
+      description: Creates a new profile for a user
+      operationId: createProfile
+      tags: [Profiles]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewProfileRequest'
+      responses:
+        '201':
+          description: Profile created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+
+  /profiles/{profileId}:
+    get:
+      summary: Get profile by ID
+      description: Retrieves a profile by its ID
+      operationId: getProfileById
+      tags: [Profiles]
+      parameters:
+        - name: profileId
+          in: path
+          required: true
+          description: ID of the profile
+          schema:
+            type: string
+            format: binary
+      responses:
+        '200':
+          description: Profile found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+        '404':
+          description: Profile not found
+
+    put:
+      summary: Update profile by ID
+      description: Fully updates a profile
+      operationId: updateProfileById
+      tags: [Profiles]
+      parameters:
+        - name: profileId
+          in: path
+          required: true
+          description: ID of the profile
+          schema:
+            type: string
+            format: binary
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequest'
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+        '404':
+          description: Profile not found
+
+    patch:
+      summary: Partially update profile by ID
+      description: Partially updates a profile
+      operationId: patchProfileById
+      tags: [Profiles]
+      parameters:
+        - name: profileId
+          in: path
+          required: true
+          description: ID of the profile
+          schema:
+            type: string
+            format: binary
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartialUpdateProfileRequest'
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+        '404':
+          description: Profile not found
+
+    delete:
+      summary: Delete profile by ID
+      description: Deletes a profile
+      operationId: deleteProfileById
+      tags: [Profiles]
+      parameters:
+        - name: profileId
+          in: path
+          required: true
+          description: ID of the profile
+          schema:
+            type: string
+            format: binary
+      responses:
+        '204':
+          description: Profile deleted successfully
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+        '404':
+          description: Profile not found
+
+  /profiles/user/{userId}:
+    get:
+      summary: Get profile by user ID
+      description: Retrieves a profile associated with a specific user
+      operationId: getProfileByUserId
+      tags: [Profiles]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user
+          schema:
+            type: string
+            format: binary
+      responses:
+        '200':
+          description: Profile found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+        '404':
+          description: Profile not found
+
   # Role Management
   /user-management/roles:
     get:
@@ -359,9 +535,59 @@ components:
         enabled:
           type: boolean
       required: [name, display_name, description]
+
+    Profile:
+      type: object
+      description: Represents a user profile
+      properties:
+        profileId:
+          type: string
+          format: binary
+          description: Unique identifier for the profile (BINARY(16))
+        userId:
+          type: string
+          format: binary
+          description: Reference to the user (BINARY(16))
+        profileSummary:
+          type: string
+          description: Summary or description of the profile
+      required: [profileId, userId]
+
+    NewProfileRequest:
+      type: object
+      description: Request body for creating a new profile
+      properties:
+        userId:
+          type: string
+          format: binary
+          description: ID of the user this profile belongs to
+        profileSummary:
+          type: string
+          description: Summary or description of the profile
+      required: [userId]
+
+    UpdateProfileRequest:
+      type: object
+      description: Request body for fully updating a profile
+      properties:
+        profileSummary:
+          type: string
+          description: Summary or description of the profile
+      required: [profileSummary]
+
+    PartialUpdateProfileRequest:
+      type: object
+      description: Request body for partially updating a profile
+      properties:
+        profileSummary:
+          type: string
+          description: Summary or description of the profile
+
 tags:
   - name: Users
     description: Endpoints for user management
+  - name: Profiles
+    description: Endpoints for profile management
   - name: Roles
     description: Endpoints for role management
   - name: SkillCatalog
