@@ -62,7 +62,7 @@ paths:
       summary: List profiles for user
       description: Retrieves all profiles associated with a specific user
       operationId: listProfilesForUser
-      tags: [Profiles]
+      tags: [UserProfiles]
       parameters:
         - name: userId
           in: path
@@ -92,7 +92,7 @@ paths:
       summary: Get user profile by ID
       description: Retrieves a specific profile that belongs to the specified user
       operationId: getUserProfileById
-      tags: [Profiles]
+      tags: [UserProfiles]
       parameters:
         - name: userId
           in: path
@@ -292,7 +292,7 @@ paths:
           description: Profile not found
 
   # Role Management
-  /user-management/roles:
+  /roles:
     get:
       summary: Get all roles
       description: Placeholder for retrieving all roles
@@ -326,7 +326,7 @@ paths:
           description: Unauthorized - Authentication is required or token is invalid/expired
         '403':
           description: Forbidden - User does not have permission to access this resource
-  /user-management/roles/{roleId}:
+  /roles/{roleId}:
     get:
       summary: Get role by ID
       description: Placeholder for retrieving role details
@@ -849,8 +849,8 @@ components:
           description: Summary or description of the profile
 
 tags:
-  - name: Users
-    description: Endpoints for user management
+  - name: Permissions
+    description: Endpoints for permission management
   - name: Profiles
     description: Endpoints for profile management
   - name: Roles
@@ -859,5 +859,7 @@ tags:
     description: Endpoints for skill category management
   - name: SkillCategoryCatalog
     description: Endpoints for skill Catalog category management
-  - name: Permissions
-    description: Endpoints for permission management
+  - name: UserProfiles
+    description: Endpoints for access to user profiles
+  - name: Users
+    description: Endpoints for user management
