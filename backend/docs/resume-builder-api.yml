@@ -57,6 +57,95 @@ paths:
         '404':
           description: User not found
 
+    put:
+      summary: Update user (full)
+      description: Replaces the entire user resource
+      operationId: updateUser
+      tags: [Users]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequestBody'
+      responses:
+        '200':
+          description: User updated
+        '400':
+          description: Bad request
+        '404':
+          description: User not found
+
+    patch:
+      summary: Update user (partial)
+      description: Updates one or more fields of the user resource
+      operationId: patchUser
+      tags: [Users]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartialUpdateUserRequestBody'
+      responses:
+        '200':
+          description: User partially updated
+        '400':
+          description: Bad request
+        '404':
+          description: User not found
+
+    delete:
+      summary: Delete user
+      description: Deletes a user by ID
+      operationId: deleteUser
+      tags: [Users]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: User deleted successfully
+        '404':
+          description: User not found
+
+  /auth/login:
+    post:
+      summary: User login
+      description: Authenticates a user and returns a token
+      operationId: loginUser
+      tags: [Authorization]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestBody'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokenResponse'
+        '401':
+          description: Invalid credentials
+
   /users/{userId}/profiles:
     get:
       summary: List profiles for user
@@ -847,8 +936,86 @@ components:
         profileSummary:
           type: string
           description: Summary or description of the profile
+    LoginRequestBody:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: johndoe
+        password:
+          type: string
+          format: password
+          example: mySecurePassword123
 
+    AuthTokenResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: JWT access token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        tokenType:
+          type: string
+          example: Bearer
+        expiresIn:
+          type: integer
+          description: Token expiration time in seconds
+          example: 3600
+
+    UpdateUserRequestBody:
+      type: object
+      required:
+        - username
+        - email
+        - roles
+      properties:
+        username:
+          type: string
+          example: johndoe
+        email:
+          type: string
+          format: email
+          example: johndoe@example.com
+        fullName:
+          type: string
+          example: John Doe
+        isActive:
+          type: boolean
+          example: true
+        roles:
+          type: array
+          items:
+            type: string
+          example: ["USER", "ADMIN"]
+
+    PartialUpdateUserRequestBody:
+      type: object
+      description: Fields to update in the user resource
+      properties:
+        username:
+          type: string
+          example: johndoe_updated
+        email:
+          type: string
+          format: email
+          example: newemail@example.com
+        fullName:
+          type: string
+          example: Johnathan Doe
+        isActive:
+          type: boolean
+          example: false
+        roles:
+          type: array
+          items:
+            type: string
+          example: ["USER"]
 tags:
+  - name: Authorization
+    description: Endpoints for user authentication and token management
   - name: Permissions
     description: Endpoints for permission management
   - name: Profiles
