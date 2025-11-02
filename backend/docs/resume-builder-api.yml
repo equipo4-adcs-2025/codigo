@@ -57,17 +57,54 @@ paths:
         '404':
           description: User not found
 
-  /users/{userId}/profile:
+  /users/{userId}/profiles:
     get:
-      summary: Get profile by user ID
-      description: Retrieves the profile associated with a specific user
-      operationId: getProfileByUserId
+      summary: List profiles for user
+      description: Retrieves all profiles associated with a specific user
+      operationId: listProfilesForUser
       tags: [Profiles]
       parameters:
         - name: userId
           in: path
           required: true
           description: ID of the user
+          schema:
+            type: string
+            format: binary
+      responses:
+        '200':
+          description: Profiles found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Profile'
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+        '404':
+          description: Profiles not found for user
+
+  /users/{userId}/profiles/{profileId}:
+    get:
+      summary: Get user profile by ID
+      description: Retrieves a specific profile that belongs to the specified user
+      operationId: getUserProfileById
+      tags: [Profiles]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user
+          schema:
+            type: string
+            format: binary
+        - name: profileId
+          in: path
+          required: true
+          description: ID of the profile
           schema:
             type: string
             format: binary
@@ -83,13 +120,32 @@ paths:
         '403':
           description: Forbidden - User does not have permission to access this resource
         '404':
-          description: Profile not found
+          description: Profile not found for user
 
   # Profile Management
   /profiles:
+    get:
+      summary: Get all profiles
+      description: Retrieves all profiles across users
+      operationId: getAllProfiles
+      tags: [Profiles]
+      responses:
+        '200':
+          description: List of profiles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Profile'
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+
     post:
       summary: Create a new profile
-      description: Creates a new profile for a user
+      description: Creates a new profile that is linked to a user
       operationId: createProfile
       tags: [Profiles]
       requestBody:
@@ -111,6 +167,8 @@ paths:
           description: Unauthorized - Authentication is required or token is invalid/expired
         '403':
           description: Forbidden - User does not have permission to access this resource
+        '404':
+          description: User not found
 
   /profiles/{profileId}:
     get:
@@ -142,7 +200,7 @@ paths:
 
     put:
       summary: Update profile by ID
-      description: Fully updates a profile
+      description: Fully updates a profile, including reassociating to a user if provided
       operationId: updateProfileById
       tags: [Profiles]
       parameters:
@@ -177,7 +235,7 @@ paths:
 
     patch:
       summary: Partially update profile by ID
-      description: Partially updates a profile
+      description: Partially updates a profile while ensuring it remains linked to a user
       operationId: patchProfileById
       tags: [Profiles]
       parameters:
@@ -212,7 +270,7 @@ paths:
 
     delete:
       summary: Delete profile by ID
-      description: Deletes a profile
+      description: Deletes a profile by its ID
       operationId: deleteProfileById
       tags: [Profiles]
       parameters:
@@ -538,7 +596,7 @@ components:
 
     Profile:
       type: object
-      description: Represents a user profile
+      description: Represents a user profile; users can be associated with multiple profiles and every profile belongs to a user
       properties:
         profileId:
           type: string
@@ -555,7 +613,7 @@ components:
 
     NewProfileRequest:
       type: object
-      description: Request body for creating a new profile
+      description: Request body for creating a new profile associated with a user
       properties:
         userId:
           type: string
@@ -564,21 +622,29 @@ components:
         profileSummary:
           type: string
           description: Summary or description of the profile
-      required: [userId]
+      required: [userId, profileSummary]
 
     UpdateProfileRequest:
       type: object
-      description: Request body for fully updating a profile
+      description: Request body for fully updating a profile while maintaining its user association
       properties:
+        userId:
+          type: string
+          format: binary
+          description: ID of the user this profile belongs to
         profileSummary:
           type: string
           description: Summary or description of the profile
-      required: [profileSummary]
+      required: [userId, profileSummary]
 
     PartialUpdateProfileRequest:
       type: object
-      description: Request body for partially updating a profile
+      description: Request body for partially updating a profile; userId may be supplied to reassign the profile
       properties:
+        userId:
+          type: string
+          format: binary
+          description: ID of the user this profile belongs to
         profileSummary:
           type: string
           description: Summary or description of the profile
