@@ -400,13 +400,13 @@ paths:
           description: Forbidden - User does not have permission to access this resource
         '404':
           description: Role not found
-  # Skills
+  # Skills Category
   /skills/categories:
     get:
       summary: Get all skill categories
-      description: Placeholder for retrieving skill categories
+      description: Retrieves all skills categories available in the catalog
       operationId: getAllSkillCategories
-      tags: [SkillCatalog]
+      tags: [SkillCategoryCatalog]
       responses:
         '200':
           description: List of skill categories
@@ -419,7 +419,7 @@ paths:
       summary: Create a new skill category
       description: Placeholder for skill category creation
       operationId: createSkillCategory
-      tags: [SkillCatalog]
+      tags: [SkillCategoryCatalog]
       requestBody:
         required: true
         content:
@@ -435,15 +435,40 @@ paths:
           description: Unauthorized - Authentication is required or token is invalid/expired
         '403':
           description: Forbidden - User does not have permission to access this resource
-
-  /skills/categories/{categoryId}:
+  /skills/categories/{skillCategoryId}:
+    get:
+      summary: Get skill category by ID
+      description: Retrieves a specific skill category by its ID
+      operationId: getSkillCategoryById
+      tags: [SkillCategoryCatalog]
+      parameters:
+        - name: skillCategoryId
+          in: path
+          required: true
+          description: ID of the skill
+          schema:
+            type: string
+            format: binary
+      responses:
+        '200':
+          description: Skill Category found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkillCategory'
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+        '404':
+          description: Skill Category not found
     put:
       summary: Update skill category
       description: Placeholder for updating skill category
       operationId: fullUpdateSkillCategory
-      tags: [SkillCatalog]
+      tags: [SkillCategoryCatalog]
       parameters:
-        - name: categoryId
+        - name: skillCategoryId
           in: path
           required: true
           schema:
@@ -463,6 +488,158 @@ paths:
           description: Forbidden - User does not have permission to access this resource
         '404':
           description: Category not found
+    delete:
+      summary: Delete  Skill Category by ID
+      description: Deletes a skill Category from the catalog
+      operationId: deleteSkillCategoryById
+      tags: [SkillCategoryCatalog]
+      parameters:
+        - name: skillCategoryId
+          in: path
+          required: true
+          description: ID of the skill Category to delete
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Skill Category deleted successfully
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Skill Category not found
+  # Skills
+  /skills:
+    get:
+      summary: Get all skills
+      description: Retrieves all skills available in the catalog
+      operationId: getAllSkills
+      tags: [SkillCatalog]
+      responses:
+        '200':
+          description: List of all skills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Skill'
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+
+    post:
+      summary: Create a new skill
+      description: Adds a new skill to the catalog and links it to an existing skill category
+      operationId: createSkill
+      tags: [SkillCatalog]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Skill'
+      responses:
+        '201':
+          description: Skill created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+        '400':
+          description: Bad request - Invalid data or missing required fields
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+
+  /skills/{skillId}:
+    get:
+      summary: Get skill by ID
+      description: Retrieves details of a specific skill using its unique ID
+      operationId: getSkillById
+      tags: [SkillCatalog]
+      parameters:
+        - name: skillId
+          in: path
+          required: true
+          description: ID of the skill to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Skill found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+        '401':
+          description: Unauthorized - Authentication is required or token is invalid/expired
+        '403':
+          description: Forbidden - User does not have permission to access this resource
+        '404':
+          description: Skill not found
+
+    put:
+      summary: Update skill by ID
+      description: Updates the skill’s name or its associated category
+      operationId: updateSkillById
+      tags: [SkillCatalog]
+      parameters:
+        - name: skillId
+          in: path
+          required: true
+          description: ID of the skill to update
+          schema:
+            type: string
+            format: binary
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Skill'
+      responses:
+        '200':
+          description: Skill updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+        '400':
+          description: Bad request - Invalid data
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Skill not found
+
+    delete:
+      summary: Delete skill by ID
+      description: Deletes a skill from the catalog permanently
+      operationId: deleteSkillById
+      tags: [SkillCatalog]
+      parameters:
+        - name: skillId
+          in: path
+          required: true
+          description: ID of the skill to delete
+          schema:
+            type: string
+            format: binary
+      responses:
+        '204':
+          description: Skill deleted successfully
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Skill not found
+            
   # Permissions
   /permissions:
     get:
@@ -569,11 +746,33 @@ components:
 
     SkillCategory:
       type: object
-      description: Placeholder for skill category schema
+      description: Represents a category that groups related skills within the skill catalog, each category defines a logical grouping of skills.
       properties:
+        skillCategoryId:
+          type: string
+          description: Unique identifier for the skill category
         skillCategoryName:
           type: string
-      required: [skillCategoryName]
+          description: Name of the skill category
+        display_order:
+          type: integer
+          description: Order use to display the category
+      required: [skillCategoryId, skillCategoryName, display_order]
+
+    Skill:
+      type: object
+      description: Represents an individual skill that belongs to a specific skill category. Each skill defines a concrete capability or technology (e.g., Python, Java, Leadership) and is linked to a category for logical organization within the skill catalog.
+      properties:
+        skillId:
+          type: string
+          description: Unique identifier for the skill
+        skillCategoryId:
+          type: string
+          description: Reference to the skill category
+        skillName:
+          type: string
+          description: Name of the skill
+      required: [skillId, skillCategoryId, skillName]
 
     Permission:
       type: object
@@ -658,5 +857,7 @@ tags:
     description: Endpoints for role management
   - name: SkillCatalog
     description: Endpoints for skill category management
+  - name: SkillCategoryCatalog
+    description: Endpoints for skill Catalog category management
   - name: Permissions
     description: Endpoints for permission management
